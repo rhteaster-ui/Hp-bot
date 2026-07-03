@@ -1,36 +1,24 @@
-import search from "./search.js";
-import detail from "./detail.js";
+import search from "./lib/search.js";
+import detail from "./lib/detail.js";
+import compare from "./lib/compare.js";
+import spec from "./lib/spec.js";
 
-function normalize(text = "") {
-    return text
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "");
-}
+export default class Carisinyal {
 
-export default async function spec(query) {
-    if (!query) {
-        return {
-            status: false,
-            message: "Query tidak boleh kosong."
-        };
+    search(query){
+        return search(query);
     }
 
-    const results = await search(query);
-
-    if (!results || results.length === 0) {
-        return {
-            status: false,
-            message: "HP tidak ditemukan."
-        };
+    detail(url){
+        return detail(url);
     }
 
-    const target = normalize(query);
+    compare(a,b){
+        return compare(a,b);
+    }
 
-    const best =
-        results.find(x => normalize(x.title) === target) ||
-        results.find(x => normalize(x.title).includes(target)) ||
-        results.find(x => target.includes(normalize(x.title))) ||
-        results[0];
+    spec(query){
+        return spec(query);
+    }
 
-    return await detail(best.url);
 }
